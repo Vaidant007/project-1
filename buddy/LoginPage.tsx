@@ -1,0 +1,243 @@
+import React, { useState } from "react";
+import "./LoginPage.css";
+import "./FeaturesTab.css"; // Make sure this file exists
+import "./ContactTab.css";
+
+// FeaturesTab component
+const features = [
+  {
+    title: "AI-powered Idea Analysis and Feedback",
+    description: "Leverage advanced AI to analyze your ideas and receive actionable, intelligent feedback instantly."
+  },
+  {
+    title: "Community-driven Collaboration and Networking",
+    description: "Connect and collaborate with a vibrant community of innovators, entrepreneurs, and investors."
+  },
+  {
+    title: "Mentor and Investor Matching",
+    description: "Get matched with the right mentors and investors to accelerate your journey."
+  },
+  {
+    title: "Progress Tracking and Analytics Dashboards",
+    description: "Monitor your startup’s growth and milestones with intuitive analytics dashboards."
+  },
+  {
+    title: "Resource Marketplaces and Support Services",
+    description: "Access a curated marketplace for essential resources and professional support."
+  },
+  {
+    title: "Secure, Scalable, and Customizable Environments",
+    description: "Build and grow in a platform that is secure, scalable, and tailored to your needs."
+  }
+];
+
+const FeaturesTab: React.FC = () => (
+  <div className="features-tab">
+    <h2>Platform Features</h2>
+    <ul className="features-list">
+      {features.map((feature, idx) => (
+        <li key={idx} className="feature-item">
+          <h3>{feature.title}</h3>
+          <p>{feature.description}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
+
+const ContactTab: React.FC = () => (
+  <div className="contact-tab">
+    <h2>Contact Developer</h2>
+    <ul className="contact-list">
+      {/* list items here */}
+    </ul>
+  </div>
+);
+
+// TaskBar component
+interface TaskBarProps {
+  onShowFeatures: () => void;
+  onShowHome: () => void;
+  showFeatures: boolean;
+}
+const TaskBar: React.FC<TaskBarProps> = ({ onShowFeatures, onShowHome, showFeatures }) => (
+  <nav className="taskbar">
+    <div className="logo">IdeLight</div>
+    <ul className="nav-links">
+      <li>
+        <a
+          href="#"
+          className={!showFeatures ? "active" : ""}
+          onClick={(e) => { e.preventDefault(); onShowHome(); }}
+        >
+          Home
+        </a>
+      </li>
+      <li>
+        <a
+          href="#"
+          className={showFeatures ? "active" : ""}
+          onClick={(e) => { e.preventDefault(); onShowFeatures(); }}
+        >
+          Features
+        </a>
+      </li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div className="nav-actions">
+      <a href="#" className="nav-btn">Sign Up</a>
+    </div>
+  </nav>
+);
+
+// Background content
+const BackgroundContent: React.FC = () => (
+  <div className="background-content">
+    <h1>Welcome to IdeLight</h1>
+    <p>Where Investors and Entrepreneurs Connect to Build the Future.</p>
+    <img
+      src="https://undraw.co/api/illustrations/3b8e1b6a-7c3e-4c5d-b6f7-3e8a9c1e3e3e"
+      alt="Innovation"
+      className="bg-illustration"
+    />
+  </div>
+);
+
+const LoginPage: React.FC = () => {
+  const [role, setRole] = useState<"investor" | "entrepreneur">("investor");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showFeatures, setShowFeatures] = useState<boolean>(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError("Please enter both email/phone and password.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(`Welcome, ${data.user.name || role}!`);
+        // TODO: Redirect or set user state here
+      } else {
+        setError(data.message || "Login failed. Please try again.");
+      }
+    } catch (err) {
+      setError("Server error. Please try again later.");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="login-bg">
+      <TaskBar
+        onShowFeatures={() => setShowFeatures(true)}
+        onShowHome={() => setShowFeatures(false)}
+        showFeatures={showFeatures}
+      />
+      {showFeatures ? (
+        <FeaturesTab />
+      ) : (
+        <div className="main-content">
+          <BackgroundContent />
+          <div className="login-outer">
+            <div className="login-container">
+              <div className="login-tabs">
+                <button
+                  className={role === "investor" ? "active" : ""}
+                  onClick={() => setRole("investor")}
+                  type="button"
+                >
+                  Investor
+                </button>
+                <button
+                  className={role === "entrepreneur" ? "active" : ""}
+                  onClick={() => setRole("entrepreneur")}
+                  type="button"
+                >
+                  Entrepreneur
+                </button>
+              </div>
+              <div className="login-form">
+                <h2>
+                  {role === "investor" ? "Investor Login" : "Entrepreneur Login"}
+                </h2>
+                <form onSubmit={handleLogin} autoComplete="off">
+                  <input
+                    type="text"
+                    placeholder="Email or Phone"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="username"
+                    disabled={loading}
+                  />
+                  <div className="password-field">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      autoComplete="current-password"
+                      disabled={loading}
+                    />
+                    <button
+                      type="button"
+                      className="show-hide"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      tabIndex={-1}
+                      disabled={loading}
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                  <div className="forgot-register">
+                    <a href="/forgot-password">Forgot Password?</a>
+                    <span> | </span>
+                    <a href={`/register?role=${role}`}>
+                      New {role === "investor" ? "Investor" : "Entrepreneur"}? Register here
+                    </a>
+                  </div>
+                  {error && <div className="error">{error}</div>}
+                  <button type="submit" className="login-btn" disabled={loading}>
+                    {loading
+                      ? "Logging in..."
+                      : `Login as ${role.charAt(0).toUpperCase() + role.slice(1)}`}
+                  </button>
+                </form>
+                <div className="social-login">
+                  <p>Or login with:</p>
+                  <button className="social-btn google" type="button">Google</button>
+                  {role === "investor" && (
+                    <button className="social-btn linkedin" type="button">LinkedIn</button>
+                  )}
+                  {role === "entrepreneur" && (
+                    <button className="social-btn facebook" type="button">Facebook</button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default LoginPage;
+
