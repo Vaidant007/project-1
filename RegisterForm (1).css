@@ -1,0 +1,107 @@
+.register-container {
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.25);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.25);
+  width: 100%;
+  max-width: 370px;
+  padding: 36px 32px;
+  margin: 24px 0;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.register-tabs button {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 8px 8px 0 0;
+  transition: background 0.2s;
+  font-weight: 500;
+}
+
+.register-tabs button.active {
+  background: #fff;
+  color: #1976d2;
+  font-weight: bold;
+}
+
+.register-form h2 {
+  text-align: center;
+  margin-bottom: 18px;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.2);
+  color: #222;
+  font-size: 1rem;
+  outline: none;
+  font-weight: 500;
+}
+
+.error {
+  color: #ffbaba;
+  background: #d8000c;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 0.98rem;
+}
+
+.login-btn, .back-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #1976d2 60%, #21cbf3 100%);
+  color: #fff;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(25,118,210,0.13);
+  transition: background 0.2s;
+}
+
+.back-btn {
+  background: #fff;
+  color: #1976d2;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.login-btn:hover {
+  background: linear-gradient(90deg, #1565c0 60%, #00bcd4 100%);
+}
+.back-btn:hover {
+  background: #1976d2;
+  color: #fff;
+}
+.email-input {
+  width: 280px; /* or any width you want */
+  max-width: 100%; /* ensures it’s responsive */
+}
